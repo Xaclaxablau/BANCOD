@@ -1,0 +1,97 @@
+CREATE TABLE venda(ID INT AUTO_INCREMENT PRIMARY KEY, valor_total DECIMAL(10, 2), data DATETIME, cliente_id INT, vendedor_id INT, pagamento_id INT);
+
+
+
+CREATE TABLE cliente
+(
+	cliente_id INT,
+    nome VARCHAR(45),
+    telefone VARCHAR(45),
+    email VARCHAR(45)
+);
+
+
+
+
+
+CREATE TABLE vendedor
+(
+	vendedor_id INT,
+    nome VARCHAR(45)
+);
+
+
+
+
+CREATE TABLE pagamento
+(
+	pagamento_id INT,
+    forma_pagamento VARCHAR(45)
+);
+
+
+
+CREATE TABLE vendaHasProduto
+(
+	venda_id INT,
+    produto INT
+);
+
+
+
+
+
+CREATE TABLE produtos
+(
+	produto_id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(45),
+    preco DECIMAL (10, 2),
+    qtd_estoque VARCHAR(45),
+    categoria INT,
+    fornecedores_id INT
+    
+);
+
+
+
+CREATE TABLE fornecedor
+(
+	fornecedor_id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(45)
+);
+
+
+CREATE TABLE categoria
+(
+	categoria_id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(45)
+);
+
+
+ALTER TABLE produtos ADD CONSTRAINT fk_produto_fornecedor FOREIGN KEY (fornecedores_id) REFERENCES fornecedor(fornecedor_id);
+
+ALTER TABLE produtos ADD CONSTRAINT fk_produto_categoria FOREIGN KEY (categoria) REFERENCES categoria(categoria_id);
+
+ALTER TABLE vendahasproduto ADD CONSTRAINT fk_vendaproduto FOREIGN KEY (produto) REFERENCES produtos(produto_id);
+
+
+
+ALTER TABLE venda ADD CONSTRAINT fk_vendaCliente FOREIGN KEY (cliente_id) REFERENCES cliente(cliente_id);
+ALTER TABLE venda ADD CONSTRAINT fk_vendaPagamento FOREIGN KEY (pagamento_id) REFERENCES pagamento(pagamento_id);
+ALTER TABLE venda ADD CONSTRAINT fk_vendaVendedor FOREIGN KEY (vendedor_id) REFERENCES vendedor(vendedor_id);
+
+INSERT INTO cliente (nome, telefone, email) VALUES ("KLeberson", "87991543212", "algo@gmail.com");
+INSERT INTO cliente (nome, telefone, email) VALUES ("KLeberson", "87991543212", "algo@gmail.com");
+INSERT INTO categoria (nome) VALUES ("Carro");
+INSERT INTO fornecedor (nome) VALUES ("Transportes Brazil LTDA");
+INSERT INTO pagamento (forma_pagamento) VALUES ("DINHEIRO");
+INSERT INTO vendedor (nome) VALUES ("ALFREDO");
+INSERT INTO produtos (categoria, fornecedores_id, nome, preco, qtd_estoque) VALUES (1, 1, "GOL", 25, 10);
+
+
+SELECT p.*, f.nome as nome_fornecedor, c.nome as nome_categoria
+	FROM produtos as p
+    JOIN fornecedor as f
+    	ON p.fornecedores_id = f.fornecedor_id
+     JOIN categoria as c
+     	ON p.categoria = c.categoria_id;
